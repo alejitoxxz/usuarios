@@ -4,7 +4,6 @@ import com.co.eatupapi.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,10 +19,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/catalog/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user-module/api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user-module/api/v1/users/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user-module/api/v1/document-types").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user-module/api/v1/departments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user-module/api/v1/cities").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
